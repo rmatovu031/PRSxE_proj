@@ -1,0 +1,37 @@
+name: gxenv
+channels:
+  - conda-forge
+  - nvidia
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.10
+
+  # Data & plotting
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+
+  # Machine learning
+  - scikit-learn
+  - optuna
+  - shap
+
+  # GPU-enabled XGBoost
+  - xgboost>=2.0
+  - cudatoolkit>=11.8
+
+  # Utilities
+  - pip
+  - joblib
+  - tqdm
+
+  # Optional: for saving large models or outputs
+  - h5py
+
+  # Pip section (for safety if SHAP/Optuna need updates)
+  - pip:
+      - optuna-dashboard
+
