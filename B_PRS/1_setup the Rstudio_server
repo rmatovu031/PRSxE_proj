@@ -23,3 +23,12 @@ ls -l /tmp/overlay_dir/
 chmod 777 /tmp/overlay_dir
 
 singularity shell   --overlay /tmp/overlay_dir   --bind /home/rstudio-server:/home/rstudio-server   --bind "/mnt/project/Bulk/Imputation/UKB imputation from genotype:/mnt/project/Bulk/Imputation/UKB imputation from genotype"   /home/rstudio-server/genopred_pipeline_latest.sif
+
+### 
+#Inside the apptainer
+#################
+source /opt/miniforge/etc/profile.d/conda.sh
+conda activate genopred
+cd /tools/GenoPred/pipeline/
+
+snakemake -n --use-conda --configfile=/home/rstudio-server/genopred/config/config.yaml output_all
