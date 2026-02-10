@@ -17,7 +17,7 @@ https://github.com/rmatovu031/PRSxE_proj/blob/main/B_PRS/R_pgs_compare.ipynb
 Used logistic regression to run association testing to get the predictors for T2D in Africans and Europeans
 - AFR - https://github.com/rmatovu031/PRSxE_proj/blob/main/C_Stat_approach/R_gxe_AFR_finale.ipynb
 - EUR - https://github.com/rmatovu031/PRSxE_proj/blob/main/C_Stat_approach/R_gxe_EUR_finale.ipynb
-The analysis was run on ilifu
+- The analysis was run on ilifu
 
 ## Step D : Machine Learning based approach
 Used XGBoost model to run a classifer model and used SHAP for interpretability. 
