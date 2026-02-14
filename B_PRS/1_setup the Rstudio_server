@@ -1,0 +1,34 @@
+## instruction for RStudio server setup for GenoPred
+
+echo 'keyboard-configuration keyboard-configuration/layout select us' | sudo debconf-set-selections
+echo 'keyboard-configuration keyboard-configuration/variant select English (US)' | sudo debconf-set-selections
+sudo DEBIAN_FRONTEND=noninteractive apt update && sudo DEBIAN_FRONTEND=noninteractive apt install -y build-essential libseccomp-dev pkg-config squashfs-tools cryptsetup golang tmux
+export VERSION=3.11.0
+wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-ce-${VERSION}.tar.gz
+tar -xvzf singularity-ce-${VERSION}.tar.gz
+cd singularity-ce-${VERSION}
+./mconfig --without-suid
+make -C builddir
+sudo make -C builddir install
+cd ~
+singularity pull library://opain/genopred/genopred_pipeline:latest
+mkdir -p /home/rstudio-server/ukb/ukb_symlinks
+for chr in $(seq 1 22); do   for file in $(echo bgen bgen.bgi); do     ln -s /mnt/project/Bulk/Imputation/UKB\ imputation\ from\ genotype/ukb22828_c${chr}_b0_v3.${file} /home/rstudio-server/ukb/ukb_symlinks/ukb_imp.chr${chr}.${file};   done; done
+ln -s /mnt/project/Bulk/Imputation/UKB\ imputation\ from\ genotype/ukb22828_c1_b0_v3.sample /home/rstudio-server/ukb/ukb_symlinks/ukb_imp.sample
+
+
+
+mkdir -p /tmp/overlay_dir
+ls -l /tmp/overlay_dir/
+chmod 777 /tmp/overlay_dir
+
+singularity shell   --overlay /tmp/overlay_dir   --bind /home/rstudio-server:/home/rstudio-server   --bind "/mnt/project/Bulk/Imputation/UKB imputation from genotype:/mnt/project/Bulk/Imputation/UKB imputation from genotype"   /home/rstudio-server/genopred_pipeline_latest.sif
+
+### 
+#Inside the apptainer
+#################
+source /opt/miniforge/etc/profile.d/conda.sh
+conda activate genopred
+cd /tools/GenoPred/pipeline/
+
+snakemake -n --use-conda --configfile=/home/rstudio-server/genopred/config/config.yaml output_all
